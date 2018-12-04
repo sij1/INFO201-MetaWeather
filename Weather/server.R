@@ -39,7 +39,7 @@ function(input, output){
   })
   
   output$plot <- renderPlot({
-    
+    years_data <- variables()[['years_data']]
     
   })
   
