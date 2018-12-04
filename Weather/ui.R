@@ -13,7 +13,7 @@ shinyUI(
     ),
     
     mainPanel(
-      dataTableOutput("table1")
+      plotOutput("myplot")
     )
   )
 )
