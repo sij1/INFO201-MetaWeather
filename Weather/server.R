@@ -38,7 +38,10 @@ function(input, output){
     
   })
   
-  
+  output$plot <- renderPlot({
+    
+    
+  })
   
   output$table1 <- renderDataTable({
     data <- variables()[['years_data']][[1]]
