@@ -2,7 +2,7 @@ library(jsonlite)
 library(httr)
 library(dplyr)
 
-city <- "Seattle"
+city <- "Los&Angeles"
 data <- GET(paste0("https://www.metaweather.com/api/location/search/?query=", city))
 data_content <- fromJSON(content(data, "text"))
 View(data_content)
