@@ -19,7 +19,7 @@ function(input, output){
     if(input$Date == "") {
       date <- "11/25"
     } else {
-      city <- input$City
+      date <- input$Date
     }
     
     data <- GET(paste0("https://www.metaweather.com/api/location/search/?query=", gsub(" ", "&", city)))
@@ -69,13 +69,25 @@ function(input, output){
   
   output$myplot <- renderPlot({
     years <- variables()[['years']]
+    city <- variables()[['city']]
+    date <- variables()[['date']]
+    
     weather_data <- weatherTable() %>% 
                     plyr::ldply(., data.frame) %>% 
                     aggregate(cbind(probability) ~ weather_state_name, data = ., FUN = sum) %>% 
-                    mutate(probability = probability / length(years))              
+                    mutate(probability = round(probability / length(years), 4) * 100)              
 
     ggplot(data = weather_data, aes(x = weather_state_name, y = probability)) +
-      geom_bar(stat = "identity")
+      geom_bar(stat = "identity", color = "black", fill = "blue") +
+      geom_text(aes(label = probability), vjust = -0.5, size = 5.0) +
+      ggtitle(paste0("Probability of Likely Weather Status at ", city, " on Date ", date, "(mm/dd)")) +
+      ylab("Probability(%)") +
+      xlab("Likely Weather States") +
+      theme(plot.title = element_text(size = 20, face = "bold"))
+  })
+  
+  output$explanation <- renderText({
+    "The following barplot represents the probability of each weather state for a specific date, using the data from the past five years as the background"
   })
   
 }  

@@ -5,7 +5,7 @@ library(jsonlite)
 
 shinyUI(
   pageWithSidebar(
-    headerPanel("Weather State Likeliness"),
+    headerPanel("Weather State Likelihood Probability"),
     
     sidebarPanel(
       textInput("City", "Please Input Your City"),
@@ -13,6 +13,7 @@ shinyUI(
     ),
     
     mainPanel(
+      textOutput("explanation"),
       plotOutput("myplot")
     )
   )
