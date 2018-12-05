@@ -20,8 +20,9 @@ uri <- paste0("https://www.metaweather.com/api/location/", id, "/", date)
 
 city_data <- GET(uri)
 city_content <- fromJSON(content(city_data, "text"))
-View(city_content)
+max_data <- as.data.frame(table(city_content$max_temp))
 
 ## Predicting future likeliness of weather state
 ## Wind speed and temperature change
 ## Temperature differences
+
