@@ -1,26 +1,31 @@
-# A ui.R file, that drives the structure of the user interface
-
 library(shiny)
+library(rsconnect)
+library(dplyr)
+library(jsonlite)
 
-# Defines a fluidPage
-my_ui <- fluidPage(
-  
-  # Creates a Shiny UI that contains an title, sidebar, and main panel
-  pageWithSidebar(
+shinyUI(
+  fluidPage(
+    titlePanel("MayWeather Project"),
+    htmlOutput("url"),
+    textOutput("introduction"),
     
-    # Defines application title.
-    headerPanel("Temperature Differences by City"),
-    
-    # Creates two widgets in the sidebar
     sidebarPanel(
-      textInput("City", "Please enter a city (ex. Seattle)  :"),
-      textInput("Date", "Please enter a date (ex. ??/??) :")
+      textOutput("caution"),
+      textInput("City", "Please Input Your City"),
+      textInput("Date", "Please Input the Desired Date (mm/dd)"),
+      textOutput("corCaution"),
+      selectInput("Var1", "Please Input Your Variable 1",
+                  choices = c("min_temp", "max_temp", "the_temp", "wind_speed", "air_pressure", "humidity", "visibility")),
+      selectInput("Var2", "Please Input Your Variable 2",
+                  choices = c("min_temp", "max_temp", "the_temp", "wind_speed", "air_pressure", "humidity", "visibility"))
     ),
     
-    # puts everything on output
     mainPanel(
-      plotOutput("tempPlot"),
-      textOutput("output")
+      tabsetPanel(type = "tabs",
+                  tabPanel("Weather State", textOutput("wexplanation"), plotOutput("weatherplot")),
+                  tabPanel("Correlation", textOutput("cexplanation"), plotOutput("corplot")),
+                  tabPanel("Temperature", plotOutput("tempPlot"), textOutput("output"))
+      )
     )
   )
 )
