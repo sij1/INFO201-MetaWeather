@@ -9,6 +9,7 @@ library(ggplot2)
 shinyServer(
 function(input, output){
   
+  ## All the reactive variables used for the project
   variables <- reactive({
     if(input$City == "") {
       city <- "Seattle"
@@ -41,7 +42,8 @@ function(input, output){
     
     year_data <- year_funct(year)
     years_data <- lapply(years, function(x) year_funct(x))
-
+    
+    ## Made a list to be able to access them in other functions
     list(
       city = city,
       date = date,
@@ -55,6 +57,7 @@ function(input, output){
     
   })
   
+  ## Reactive function that creates the necessary table for plotting the state plot
   weatherTable <- reactive({
     years <- variables()[['years']]
     years_data <- variables()[['years_data']]
@@ -71,6 +74,7 @@ function(input, output){
     weather_data <- lapply(years_data, function(x) weather_funct(x))
   })
   
+  ## Reactive function that creates the necessary table for plotting the correlation plot
   correlation <- reactive({
     var1 <- variables()[['var1']]
     var2 <- variables()[['var2']]
@@ -80,21 +84,25 @@ function(input, output){
     return(cor_data)
   })
   
-  
+  ## Plots the correlation using the past five year of data
   output$corplot <- renderPlot({
     var1 <- variables()[['var1']]
     var2 <- variables()[['var2']]
+    city <- variables()[['city']]
+    date <- variables()[['date']]
+    
     cor_data <- correlation()
     ggplot(data = cor_data, aes(x = UQ(sym(var1)), y = UQ(sym(var2)))) +
       geom_point() +
       stat_smooth(method = "lm", formula = y ~ x) +
       xlab(gsub("_", " ", variables()[['var1']])) +
       ylab(gsub("_", " ", variables()[['var2']])) +
-      ggtitle(paste0("Correlation Plot of ", var1, " and ", var2)) +
+      ggtitle(paste0("Correlation Plot of ", gsub("_", " ", variables()[['var1']]), " and ", gsub("_", " ", variables()[['var2']]), " in ", 
+                     city, " on date ", date)) +
       theme(plot.title = element_text(size = 20, face = "bold"))
   })
   
-  
+  ## Plots the states and its probability using the previously occured weather states the past five years
   output$weatherplot <- renderPlot({
     years <- variables()[['years']]
     city <- variables()[['city']]
@@ -114,11 +122,13 @@ function(input, output){
       theme(plot.title = element_text(size = 20, face = "bold"))
   })
   
+  ## This explanation explains the user about the weather state plot
   output$wexplanation <- renderText({
     date <- variables()[['date']]
     paste0("The following barplot represents the probability of each weather state for a specific date, using the data from the past five years on ", date)
   })
   
+  ## This explanation explains the user about the correlation plot
   output$cexplanation <- renderText({
     var1 <- gsub("_", " ", variables()[['var1']])
     var2 <- gsub("_", " ", variables()[['var2']])
@@ -127,16 +137,23 @@ function(input, output){
     paste0("The following plot represents a correlation between the variables selected by the user. The data is represented by using the past five years of data for ", date, ". The following plot uses ", var1, " as the x values and ", var2, " as y values.")
   })
   
+  ## Introduction statement for the project
   output$introduction <- renderText({
-    "For our final project, we decided to use the MetaWeather API dataset. The dataset is accesible with their API uri, which requires a speicific city ID, which can be obtained by searching for it on the API. The dataset contains data about time, min and max temperature, wind speed, wind direction, air pressure, humidity, visibility, and predictability. This application can be used to find the probabilty of a weather state on a date, observe the pattern in maximum and minimum temperature throughout the day, and look at correlation of any of the data the user desires about the date. The dataset requires the city name and date to be in exact format."
+    "For our final project, we decided to use the MetaWeather API dataset. The dataset is accesible with their API uri, which requires a speicific city ID, which can be obtained by searching their location API dataset. The main dataset contains data about time, min and max temperature, wind speed, wind direction, air pressure, humidity, visibility, and predictability. This application can be used to find the probabilty of a weather state on a date, observe the pattern in maximum and minimum temperature throughout the day, and look at correlation of any of the data the user desires about the date. The dataset requires the city name and date to be in exact format. Our target audience is anyone who is interested in the weather characteristics of a specific date"
   })
   
-  output$uri <- renderUI({
+  ## URL to the MetaWeather api page
+  output$url <- renderUI({
     url <- a("MetaWeather API Link", href = "https://www.metaweather.com/api/")
   })
   
+  ## Caution for the text inputs for users.
   output$caution <- renderText({
-    "CAUTION: If the input isn't correctly put in(spacing problem, date incorrectly put in) the plot will produce an error"
+    "CAUTION: If the input isn't typed in correctly (spacing problem, date incorrectly put in) the plot will produce an error"
+  })
+  
+  output$corCaution <- renderText({
+    "The following pair of inputs may not have a correlation at all"
   })
 }  
 )

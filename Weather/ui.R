@@ -17,12 +17,15 @@ library(jsonlite)
 
 shinyUI(
   fluidPage(
-    titlePanel("Weather State Likelihood Probability"),
-
+    titlePanel("MetaWeather Project"),
+    htmlOutput("url"),
+    textOutput("introduction"),
+    
     sidebarPanel(
       textOutput("caution"),
       textInput("City", "Please Input Your City"),
       textInput("Date", "Please Input the Desired Date (mm/dd)"),
+      textOutput("corCaution"),
       selectInput("Var1", "Please Input Your Variable 1",
                   choices = c("min_temp", "max_temp", "the_temp", "wind_speed", "air_pressure", "humidity", "visibility")),
       selectInput("Var2", "Please Input Your Variable 2",
@@ -30,8 +33,6 @@ shinyUI(
     ),
     
     mainPanel(
-      htmlOutput("uri"),
-      textOutput("introduction"),
       tabsetPanel(type = "tabs",
                   tabPanel("Weather State", textOutput("wexplanation"), plotOutput("weatherplot")),
                   tabPanel("Correlation", textOutput("cexplanation"), plotOutput("corplot"))
