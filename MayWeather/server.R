@@ -4,6 +4,7 @@ library(dplyr)
 library(jsonlite)
 library(httr)
 library(cowplot)
+library(ggplot2)
 
 shinyServer(
   function(input, output){
@@ -46,18 +47,25 @@ shinyServer(
       minMax <- city_data2 %>% 
                 mutate(time = substr(created, 12, 19)) %>% 
                 select(time, min_temp, max_temp) %>% 
-                arrange(time) 
+                arrange(time) %>%
+                mutate(time2 = as.numeric(substr(time, 1, 2)) +
+                       (as.numeric(substr(time, 4, 5)) / 60) +
+                       (as.numeric(substr(time, 7, 8)) / 3600)) 
+      View(minMax)
       minTemp <- minMax %>% 
-        filter(min_temp == min(min_temp))
+        filter(min_temp == min(min_temp)) 
       maxTemp <- minMax %>% 
         filter(max_temp == max(max_temp))
+     
+      
 
-        ggplot(minMax, aes(x = time, width = .25)) + 
+      ggplot(minMax, aes(x = time2, width = .75)) + 
         geom_bar(aes(y = max_temp),stat = "identity", fill = "red", position = "dodge") +
         geom_bar(aes(y = min_temp),stat = "identity", fill = "blue", position = "dodge") +
+        scale_x_continuous(breaks = c(0:24)) +
         ylab("Temperature") +
         xlab("Time") +
-        labs(title = paste("Minimum Temperature of", city, "on the day of", date))
+        labs(title = paste("Max/Min Temperature of", city, "on the day of", date))
     })
     
     output$output <- renderText({
@@ -76,8 +84,8 @@ shinyServer(
       maxTemp <- minMax %>% 
         filter(max_temp == max(max_temp))
       
-      paste("On", date, " in", city, ", the maximum temperature was", round(maxTemp[1,3], 2),
-            "and the minimum temperature was", round(minTemp[1,2],2))
+      paste("On", date, " in", city,", the maximum temperature was", round(maxTemp[1,3], 2),
+            "and the minimum temperature was", round(minTemp[1,2],2),".")
     })
   }  
 )
