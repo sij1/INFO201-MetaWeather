@@ -20,6 +20,7 @@ shinyUI(
     titlePanel("Weather State Likelihood Probability"),
 
     sidebarPanel(
+      textOutput("caution"),
       textInput("City", "Please Input Your City"),
       textInput("Date", "Please Input the Desired Date (mm/dd)"),
       selectInput("Var1", "Please Input Your Variable 1",

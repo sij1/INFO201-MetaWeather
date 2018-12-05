@@ -90,7 +90,7 @@ function(input, output){
       stat_smooth(method = "lm", formula = y ~ x) +
       xlab(gsub("_", " ", variables()[['var1']])) +
       ylab(gsub("_", " ", variables()[['var2']])) +
-      ggtitle("Correlation Plot by User's Choice") +
+      ggtitle(paste0("Correlation Plot of ", var1, " and ", var2)) +
       theme(plot.title = element_text(size = 20, face = "bold"))
   })
   
@@ -115,14 +115,16 @@ function(input, output){
   })
   
   output$wexplanation <- renderText({
-    "The following barplot represents the probability of each weather state for a specific date, using the data from the past five years as the background"
+    date <- variables()[['date']]
+    paste0("The following barplot represents the probability of each weather state for a specific date, using the data from the past five years on ", date)
   })
   
   output$cexplanation <- renderText({
     var1 <- gsub("_", " ", variables()[['var1']])
     var2 <- gsub("_", " ", variables()[['var2']])
+    date <- variables()[['date']]
     
-    paste0("The following plot represents a correlation between the variables selected by the user. The following plot uses ", var1, " as the x values and ", var2, " as y values.")
+    paste0("The following plot represents a correlation between the variables selected by the user. The data is represented by using the past five years of data for ", date, ". The following plot uses ", var1, " as the x values and ", var2, " as y values.")
   })
   
   output$introduction <- renderText({
@@ -133,5 +135,8 @@ function(input, output){
     url <- a("MetaWeather API Link", href = "https://www.metaweather.com/api/")
   })
   
+  output$caution <- renderText({
+    "CAUTION: If the input isn't correctly put in(spacing problem, date incorrectly put in) the plot will produce an error"
+  })
 }  
 )
