@@ -28,6 +28,8 @@ function(input, output){
     
     year <- 2018
     years <- c(2014 : 2018)
+    var1 <- input$Var1
+    var2 <- input$Var2
     
     year_funct <- function(year){
       date <- paste0(year, "/", date)
@@ -39,13 +41,15 @@ function(input, output){
     
     year_data <- year_funct(year)
     years_data <- lapply(years, function(x) year_funct(x))
-    
+
     list(
       city = city,
       date = date,
       year = year,
       years = years,
-      year_data <- year_data,
+      var1 = var1,
+      var2 = var2,
+      year_data = year_data,
       years_data = years_data
     )
     
@@ -67,7 +71,31 @@ function(input, output){
     weather_data <- lapply(years_data, function(x) weather_funct(x))
   })
   
-  output$myplot <- renderPlot({
+  correlation <- reactive({
+    var1 <- variables()[['var1']]
+    var2 <- variables()[['var2']]
+    cor_data <- variables()[['years_data']] %>% 
+                  plyr::ldply(., data.frame) %>% 
+                  select(UQ(sym(var1)), UQ(sym(var2)))
+    return(cor_data)
+  })
+  
+  
+  output$corplot <- renderPlot({
+    var1 <- variables()[['var1']]
+    var2 <- variables()[['var2']]
+    cor_data <- correlation()
+    ggplot(data = cor_data, aes(x = UQ(sym(var1)), y = UQ(sym(var2)))) +
+      geom_point() +
+      stat_smooth(method = "lm", formula = y ~ x) +
+      xlab(gsub("_", " ", variables()[['var1']])) +
+      ylab(gsub("_", " ", variables()[['var2']])) +
+      ggtitle("Correlation Plot by User's Choice") +
+      theme(plot.title = element_text(size = 20, face = "bold"))
+  })
+  
+  
+  output$weatherplot <- renderPlot({
     years <- variables()[['years']]
     city <- variables()[['city']]
     date <- variables()[['date']]
@@ -86,8 +114,23 @@ function(input, output){
       theme(plot.title = element_text(size = 20, face = "bold"))
   })
   
-  output$explanation <- renderText({
+  output$wexplanation <- renderText({
     "The following barplot represents the probability of each weather state for a specific date, using the data from the past five years as the background"
+  })
+  
+  output$cexplanation <- renderText({
+    var1 <- gsub("_", " ", variables()[['var1']])
+    var2 <- gsub("_", " ", variables()[['var2']])
+    
+    paste0("The following plot represents a correlation between the variables selected by the user. The following plot uses ", var1, " as the x values and ", var2, " as y values.")
+  })
+  
+  output$introduction <- renderText({
+    "For our final project, we decided to use the MetaWeather API dataset. The dataset is accesible with their API uri, which requires a speicific city ID, which can be obtained by searching for it on the API. The dataset contains data about time, min and max temperature, wind speed, wind direction, air pressure, humidity, visibility, and predictability. This application can be used to find the probabilty of a weather state on a date, observe the pattern in maximum and minimum temperature throughout the day, and look at correlation of any of the data the user desires about the date. The dataset requires the city name and date to be in exact format."
+  })
+  
+  output$uri <- renderUI({
+    url <- a("MetaWeather API Link", href = "https://www.metaweather.com/api/")
   })
   
 }  
