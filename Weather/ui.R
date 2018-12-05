@@ -5,10 +5,13 @@ library(jsonlite)
 
 ## TODO
 ## READ RUBRIC
-## Write a summary, what question does it answer? what dataset is being used?
 ## Better description
-## Extra data interaction?
 ## Labels, Axis, Units
+## Comment on Code
+
+## Possible correlations
+## Wind speed and air pressure
+## Temperature and Humidity
 
 
 
