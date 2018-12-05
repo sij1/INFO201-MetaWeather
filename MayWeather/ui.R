@@ -17,7 +17,7 @@ library(jsonlite)
 
 shinyUI(
   fluidPage(
-    titlePanel("MetaWeather Project"),
+    titlePanel("MayWeather Project"),
     htmlOutput("url"),
     textOutput("introduction"),
     
