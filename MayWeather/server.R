@@ -57,8 +57,6 @@ shinyServer(
       maxTemp <- minMax %>% 
         filter(max_temp == max(max_temp))
      
-      
-
       ggplot(minMax, aes(x = time2, width = .75)) + 
         geom_bar(aes(y = max_temp),stat = "identity", fill = "red", position = "dodge") +
         geom_bar(aes(y = min_temp),stat = "identity", fill = "blue", position = "dodge") +
@@ -67,7 +65,7 @@ shinyServer(
         xlab("Time") +
         labs(title = paste("Max/Min Temperature of", city, "on the day of", date))
     })
-    
+
     output$output <- renderText({
       
       city_data2 <- variables()[['year_data']]
