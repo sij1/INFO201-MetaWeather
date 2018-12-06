@@ -187,7 +187,7 @@ function(input, output){
   
   ## Introduction statement for the project
   output$introduction <- renderText({
-    "For our final project, we decided to use the MetaWeather API dataset. The dataset is accesible with their API uri, which requires a speicific city ID, which can be obtained by searching their location API dataset. The main dataset contains data about time, min and max temperature, wind speed, wind direction, air pressure, humidity, visibility, and predictability. This application can be used to find the probabilty of a weather state on a date, observe the pattern in maximum and minimum temperature throughout the day, and look at correlation of any of the data the user desires about the date. The dataset requires the city name and date to be in exact format. Our target audience is anyone who is interested in the weather characteristics of a specific date"
+    "For our final project, we decided to use the MetaWeather API dataset. The dataset is accesible with their API uri, which requires a specific city ID, which can be obtained by searching their location API dataset. The main dataset contains data about time, min and max temperature, wind speed, wind direction, air pressure, humidity, visibility, and predictability. This application can be used to find the probabilty of a weather state on a date, observe the pattern in maximum and minimum temperature throughout the day, and look at correlation of any of the data the user desires about the date. The dataset requires the city name and date to be in exact format. Our target audience is anyone who is interested in the weather characteristics of a specific date"
   })
   
   ## URL to the MetaWeather api page
