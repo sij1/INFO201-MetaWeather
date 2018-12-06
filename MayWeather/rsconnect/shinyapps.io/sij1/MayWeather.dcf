@@ -5,8 +5,8 @@ account: sij1
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 604524
-bundleId: 1744355
+bundleId: 1744784
 url: https://sij1.shinyapps.io/MayWeather/
-when: 1544056761.56145
+when: 1544072241.55854
 asMultiple: FALSE
 asStatic: FALSE

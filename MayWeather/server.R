@@ -187,7 +187,7 @@ function(input, output){
   
   ## Introduction statement for the project
   output$introduction <- renderText({
-    "For our final project, we decided to use the MetaWeather API dataset. The dataset is accesible with their API uri, which requires a specific city ID, which can be obtained by searching their location API dataset. The main dataset contains data about time, min and max temperature, wind speed, wind direction, air pressure, humidity, visibility, and predictability. This application can be used to find the probabilty of a weather state on a date, observe the pattern in maximum and minimum temperature throughout the day, and look at correlation of any of the data the user desires about the date. The dataset requires the city name and date to be in exact format. Our target audience is anyone who is interested in the weather characteristics of a specific date"
+    "For our final project, we decided to use the MetaWeather API dataset. The dataset is accesible with their API uri, which requires a specific city ID, which can be obtained by searching their location API dataset. The main dataset contains data about time, min and max temperature, wind speed, wind direction, air pressure, humidity, visibility, and predictability. This application can be used to find the probabilty of a weather state on a date, observe the pattern in maximum and minimum temperature throughout the day, and look at correlation of any of the data the user desires about the date. The dataset requires the city name and date to be in exact format. Our application is aimed at people who need a basic idea of how the weather is for the city they are going to (or plan on going to)."
   })
   
   ## URL to the MetaWeather api page
@@ -197,11 +197,11 @@ function(input, output){
   
   ## Caution for the text inputs for users.
   output$caution <- renderText({
-    "CAUTION: If the input isn't typed in correctly (spacing problem, date incorrectly put in) the plot will produce an error"
+    "CAUTION: If the input isn't typed in correctly (spacing problem, date incorrectly put in) the plot will produce an error. Some cities will not work"
   })
   
   output$corCaution <- renderText({
-    "The following pair of inputs may not have a correlation at all"
+    "Select two inputs to check if they are correlated. The following pair of inputs may not have a correlation at all"
   })
 }  
 )
